@@ -1,4 +1,3 @@
-========================================================================
 Advanced Cookie Collector
 AutoHotkey v1.1
 ========================================================================
@@ -140,4 +139,3 @@ TROUBLESHOOTING
   image, it waits 50ms and tries one more time before aborting to handle 
   minor lag spikes. If it continually fails to find the provided .pngs,
   you will most likely need to create your own.
-========================================================================
