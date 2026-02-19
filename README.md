@@ -1,5 +1,5 @@
 Advanced Cookie Collector
-AutoHotkey v1.1
+AutoHotkey v1.0.2
 ===
 
 ## OVERVIEW
