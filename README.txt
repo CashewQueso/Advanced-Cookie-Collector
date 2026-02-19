@@ -1,5 +1,5 @@
 ========================================================================
-NAME GOES HERE
+Advanced Cookie Collector
 AutoHotkey v1.1
 ========================================================================
 
@@ -11,7 +11,7 @@ https://sourceforge.net/projects/cookiecollector/
 It features three independent modules that can run simultaneously or separately:
 1. Base Clicker: Rapid clicks on the big cookie & Golden Cookie hunting.
 2. Auto-Shop: Automates the Godzamok buy/sell cycle.
-3. Auto-Cast: Automatically clicks "Force the Hand of Fate" on a timer.
+3. Auto-Cast: Automatically clicks "Force the Hand of Fate" when available.
 
 The script uses a "state machine" approach, meaning you can toggle these 
 features on and off independently without stopping the script.
