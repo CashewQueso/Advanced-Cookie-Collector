@@ -353,6 +353,10 @@ AutomationCycle:
         IsShopping := false
     }
 
+  ; --- TEARDOWN: RESET QUANTITY ---
+    IsShopping := true
+    ClickOptionalImage("1.png")
+    
     ; Final cleanup when loop breaks or stops gracefully
     AutoShopActive := false
     autoStopRequested := false
