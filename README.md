@@ -89,7 +89,11 @@ If the script aborts or fails to click, you will need to use a tool like
 the Windows Snipping Tool to take your own small, precise screenshots of
 these elements and overwrite the provided files in the folder.
 
-I have also provided a script that simply scans the screen for reindeer and gives an alert when one is found. I found it difficult to find the right combination of pixels that would both be triggered by a reindeer and ignore the sheen of the Godzamok buff over certain colors of milk. Just run the script and press F9 to activate the radar.
+I have also provided a script that simply scans the screen for reindeer 
+and gives an alert when one is found. I found it difficult to find the right
+combination of pixels that would both be triggered by a reindeer and ignore
+the sheen of the Godzamok buff over certain colors of milk. Just run the script
+and press F9 to activate the radar.
 
 -- Store Controls --
 
@@ -102,11 +106,13 @@ sell.png          (The "Sell" switch text/button)
 buy.png           (The "Buy" switch text/button)
 
 -- Gameplay --
+
 gimg.png          (A Golden Cookie)
 reindeer.png          (A Reindeer)
 fhof.png          (The "Force the Hand of Fate" spell icon)
 
 -- Building Rows (For identification) --
+
 row\_cursor.png
 row\_grandma.png
 row\_farm.png
