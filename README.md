@@ -39,20 +39,20 @@ The script is currently configured to Auto-shop for the following buildings:
 * 200 each: Cursors, Grandmas, Farms, and Mines
 * 100 each of the following: Factories, Banks, Temples, Shipments, and Alchemy Labs
   This is easily adjusted to complement your current CPS by editing the Target Array
-  found near the top of the script. Instructions are provided.
+  found near the top of the script. Instructions are provided within the script.
 
 ## REQUIREMENTS
 
 1. AutoHotkey v1.1 installed.
 2. Cookie Clicker must be visible on the primary monitor.
-3. Visual Settings: It is recommended to turn OFF fancy graphics and fullscreen in
+3. Visual Settings: It is recommended to turn OFF fancy graphics, particles, and fullscreen in
    the game settings to ensure image recognition works reliably.
 
 ## SETUP INSTRUCTIONS
 
 1. Clone or download this repository to a folder on your machine.
 2. Ensure the .ahk script and all .png image files are in the SAME folder.
-3. Run the .ahk script.
+3. Run the Advanced Cookie Collector v1.1.0.ahk script.
 4. (Important) If the script fails to recognize the UI, you will need to
    create your own image snippets (see the "Required Image Files" section).
 
@@ -60,17 +60,17 @@ The script is currently configured to Auto-shop for the following buildings:
 
 All hotkeys can be customized in the script (see Configuration below).
 
-\[ F8 ]      TOGGLE BASE CLICKER
+\[ F7 ]      TOGGLE BASE CLICKER
 Starts/Stops rapid clicking and Golden Cookie hunting.
 Locks onto the big cookie location when activated.
 
-\[ Z ]       TOGGLE AUTO-SHOP (GODZAMOK CYCLE)
+\[ F8 ]       TOGGLE AUTO-SHOP (GODZAMOK CYCLE)
 Starts the Sell -> Click -> Buy loop.
 Before starting the loop, it clicks "100" to ensure correct
 quantities. If pressed while running, it requests a "Graceful
 Stop" (finishes the current buy-back before stopping).
 
-\[ F ]       TOGGLE AUTO-CAST (FTHOF)
+\[ F9 ]       TOGGLE AUTO-CAST (FTHOF)
 Starts a background timer that scans for the FTHOF spell
 every 3 seconds. Displays a tooltip next to the cursor.
 
@@ -89,6 +89,8 @@ If the script aborts or fails to click, you will need to use a tool like
 the Windows Snipping Tool to take your own small, precise screenshots of
 these elements and overwrite the provided files in the folder.
 
+I have also provided a script that simply scans the screen for reindeer and gives an alert when one is found. I found it difficult to find the right combination of pixels that would both be triggered by a reindeer and ignore the sheen of the Godzamok buff over certain colors of milk. Just run the script and press F9 to activate the radar.
+
 -- Store Controls --
 
 1.png             (The "1" quantity toggle button)
@@ -101,6 +103,7 @@ buy.png           (The "Buy" switch text/button)
 
 -- Gameplay --
 gimg.png          (A Golden Cookie)
+reindeer.png          (A Reindeer)
 fhof.png          (The "Force the Hand of Fate" spell icon)
 
 -- Building Rows (For identification) --
@@ -122,12 +125,12 @@ Open the .ahk file in a text editor to modify these settings at the top:
 
    * You can easily change the trigger keys for the script.
    * Use "^" for Ctrl, "+" for Shift, and "!" for Alt.
-   * Example: To change the Auto-Shop toggle to Shift+X, change
-     Hotkey\_AutoShop := "z"  --->  Hotkey\_AutoShop := "+x"
+   * Example: To change the Auto-Shop toggle to Alt+s, change
+     Hotkey\_AutoShop := "F8"  --->  Hotkey\_AutoShop := "!s"
 
 2. BuffClickTime
 
-   * Default: 9820
+   * Default: 9890
    * Controls how long (in ms) the script clicks the big cookie
      after selling buildings but before buying them back. Tweak this if you
      notice your click loop is not aligned with the end of your Godzamok buff.
@@ -135,7 +138,7 @@ Open the .ahk file in a text editor to modify these settings at the top:
 3. Buildings Array
 
    * This list determines the order and quantity of buildings sold.
-   * Example: \["row\_cursor.png", "row\_cursor.png", ...]
+   * Example: \["row\_cursor.png", "row\_grandma.png", ...]
    * If a building is listed twice, the script clicks it twice.
 
 ## TROUBLESHOOTING
@@ -144,7 +147,4 @@ Open the .ahk file in a text editor to modify these settings at the top:
   Check that your browser zoom is set to 100%. If you play zoomed in/out,
   you will probably have to replace the provided .png files with your own snippets.
 * If Image Search Fails:
-  The script has a built-in "Retry" mechanism. If it fails to find an
-  image, it waits 50ms and tries one more time before aborting to handle
-  minor lag spikes. If it continually fails to find the provided .pngs,
-  you will most likely need to create your own.
+  If the script fails during the "Fast-Click" phase, ensure your Buildings array matches the filenames in your directory exactly, and are ordered  sequentially. FastClickImage includes a tiny 10ms buffer, but it is designed for performance over persistence. High game lag may require increasing the `Sleep` values in the `FastClickImage` function

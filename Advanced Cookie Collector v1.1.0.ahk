@@ -16,14 +16,14 @@ SetMouseDelay, 5
 SetDefaultMouseSpeed, 0
 SetBatchLines, -1
 
-BuffClickTime := 9820  ; <-- Adjust this to fine-tune the click duration during the auto-shop cycle (in milliseconds)
+BuffClickTime := 9890  ; <-- Adjust this to fine-tune the click duration during the auto-shop cycle (in milliseconds)
 
 ; --- Configurable Hotkeys ---
 ; You can set the hotkeys by simply changing the values below
 ; Use "^" for Ctrl, "+" for Shift, "!" for Alt
-Hotkey_BaseClicker := "F8"
-Hotkey_AutoShop    := "z"
-Hotkey_AutoCast    := "f"
+Hotkey_BaseClicker := "F7"
+Hotkey_AutoShop    := "F8"
+Hotkey_AutoCast    := "F9"
 Hotkey_Exit        := "^e"
 
 ; --- Improve timer resolution (helps short sleeps/cadence) ---
@@ -41,8 +41,8 @@ cookie_Y := ""
 
 ; --- Target Array ---
 ; This is an example set-up showing how to sell/buy more than 100 of any building type
-; Cursors, Grandmas, Farms, and Mines are lsited twice so they are clicked twice per cycle
-Buildings := ["row_cursor.png", "row_cursor.png", "row_grandma.png", "row_grandma.png", "row_farm.png", "row_farm.png", "row_mine.png",  "row_mine.png", "row_factory.png", "row_bank.png", "row_temple.png", "row_shipment.png", "row_alchemy.png"]
+; Cursors, Grandmas, Farms, and Mines are listed twice so they are clicked twice per cycle
+Buildings := ["row_cursor.png", "row_grandma.png", "row_farm.png", "row_mine.png", "row_factory.png", "row_bank.png", "row_temple.png", "row_shipment.png", "row_alchemy.png", "row_portal.png", "row_cursor.png", "row_grandma.png", "row_farm.png", "row_mine.png"]
 
 ; --- Initialize Dynamic Hotkeys ---
 Hotkey, %Hotkey_BaseClicker%, ToggleBaseClicker
@@ -122,19 +122,18 @@ return
 ; --------------------
 ; Helper: ImageSearch Click (Required with Retry Contingency)
 ; --------------------
-ClickImage(img) {
+ClickImage(img, altImg := "") {
     global cookie_X, cookie_Y 
 
-    ; Attempt 1
+    ; 1. Single attempt at the primary image
     ImageSearch, outX, outY, 0, 0, A_ScreenWidth, A_ScreenHeight, *32 %img%
     
-    ; Contingency: If Attempt 1 fails, wait 50ms and try Attempt 2
-    if (ErrorLevel != 0) {
-        Sleep, 50
-        ImageSearch, outX, outY, 0, 0, A_ScreenWidth, A_ScreenHeight, *32 %img%
+    ; 2. If not found and we have an alt, one attempt at the alt
+    if (ErrorLevel != 0 && altImg != "") {
+        ImageSearch, outX, outY, 0, 0, A_ScreenWidth, A_ScreenHeight, *32 %altImg%
     }
-
-    ; Evaluate results
+    
+    ; 3. If either search succeeded
     if (ErrorLevel = 0) {
         clickX := outX + 5
         clickY := outY + 5
@@ -143,13 +142,39 @@ ClickImage(img) {
         if (cookie_X != "")
             MouseMove, %cookie_X%, %cookie_Y%, 0
         
-        Sleep, 50 
+        Sleep, 100 
         return true
     }
     
-    ; Both attempts failed
-    ToolTip, ABORT: Could not find %img%. Shop cycle aborted.
+    ; 4. Immediate failure if both single checks fail
+    ToolTip, ABORT: Could not find %img% or %altImg%.
     SetTimer, ClearToolTip, -3000
+    return false
+}
+
+; --------------------
+; Helper: Fast Click (No Sleep, No Return - For Rapid Shopping)
+; --------------------
+FastClickImage(img) {
+    ; Attempt 1
+    ImageSearch, outX, outY, 0, 0, A_ScreenWidth, A_ScreenHeight, *32 %img%
+    
+    ; Contingency: Shorter retry buffer (10ms instead of 50ms)
+    if (ErrorLevel != 0) {
+        Sleep, 10
+        ImageSearch, outX, outY, 0, 0, A_ScreenWidth, A_ScreenHeight, *32 %img%
+    }
+
+    if (ErrorLevel = 0) {
+        clickX := outX + 5
+        clickY := outY + 5
+        Click, %clickX%, %clickY%
+        
+        ; Notice: No MouseMove return logic here.
+        ; Notice: No Sleep, 50 here.
+        
+        return true
+    }
     return false
 }
 
@@ -200,6 +225,29 @@ ClickMovingOptionalImage(img) {
 }
 
 ; --------------------
+; Helper: Check Reindeer (Moving Target)
+; --------------------
+CheckReindeer() {
+    ImageSearch, rX, rY, 0, 0, A_ScreenWidth, A_ScreenHeight, *50 reindeer.png
+    if (ErrorLevel = 0) {
+        rX += 15
+        rY += 15
+        
+        ; 1. Move to the target to trigger the browser's hover state
+        MouseMove, %rX%, %rY%, 0
+        
+        ; 2. Send the click
+        Click
+        
+        ; 3. CRITICAL: Sleep the thread so the browser registers the event
+        Sleep, 150 
+        
+        return true
+    }
+    return false
+}
+
+; --------------------
 ; Helper: Check Golden Cookie
 ; --------------------
 CheckGolden() {
@@ -245,6 +293,7 @@ MainLoop:
         Click, %cookie_X%, %cookie_Y%
 
     CheckGolden()
+    CheckReindeer()
 return
 
 ; --------------------
@@ -260,21 +309,22 @@ AutomationCycle:
     while (AutoShopActive && !autoStopRequested) {
         
         CheckGolden()
+        CheckReindeer()
 
         ; Lock the mouse (pauses MainLoop and CastFhofRoutine)
         IsShopping := true
 
         ; --- SELL OUT ---
-        if (!ClickImage("sell.png")) {
+        if (!ClickImage("sell.png", "sell_on.png")) {
             IsShopping := false
             continue
         }
         
-        Sleep, 500  ; <-- UI Render Pause (Sell Mode)
+        Sleep, 250  ; <-- UI Render Pause (Sell Mode)
 
         shoppingFailed := false
         For index, building in Buildings {
-            if (!ClickImage(building)) {
+            if (!FastClickImage(building)) {
                 shoppingFailed := true
                 break
             }
@@ -300,44 +350,37 @@ AutomationCycle:
         IsShopping := false
 
         CheckGolden()
+        CheckReindeer()
 
-        ; --- CLICK COOKIE ---
+      ; --- CLICK COOKIE ---
         endTime := cursorSellTime + BuffClickTime
-        nextClick := A_TickCount
-        nextGoldenCheck := A_TickCount
         
+        ; Using the exact same stable logic from the MainLoop
         while (A_TickCount < endTime) {
-            now := A_TickCount
-            
-            if (now >= nextGoldenCheck) {
-                CheckGolden()
-                nextGoldenCheck := now + 150 
-            }
-
-            if (now >= nextClick) {
+            Loop, 25
                 Click, %cookie_X%, %cookie_Y%
-                nextClick := now + 4
-            } else {
-                Sleep, 0 
-            }
+
+            CheckGolden()
+            CheckReindeer()
         }
 
         CheckGolden()
+        CheckReindeer()
 
         ; Re-lock mouse for buy phase
         IsShopping := true
 
         ; --- BUY BACK ---
-        if (!ClickImage("buy.png")) {
+        if (!ClickImage("buy.png", "buy_on.png")) {
             IsShopping := false
             continue
         }
         
-        Sleep, 500  ; <-- UI Render Pause (Buy Mode)
+        Sleep, 250  ; <-- UI Render Pause (Buy Mode)
 
         shoppingFailed := false
         For index, building in Buildings {
-            if (!ClickImage(building)) {
+            if (!FastClickImage(building)) {
                 shoppingFailed := true
                 break
             }
