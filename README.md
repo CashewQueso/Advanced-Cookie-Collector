@@ -108,19 +108,29 @@ buy.png           (The "Buy" switch text/button)
 -- Gameplay --
 
 gimg.png          (A Golden Cookie)
+
 reindeer.png          (A Reindeer)
+
 fhof.png          (The "Force the Hand of Fate" spell icon)
 
--- Building Rows (For identification) --
+-- Building Rows --
 
 row\_cursor.png
+
 row\_grandma.png
+
 row\_farm.png
+
 row\_mine.png
+
 row\_factory.png
+
 row\_bank.png
+
 row\_temple.png
+
 row\_shipment.png
+
 row\_alchemy.png
 
 ## CONFIGURATION
