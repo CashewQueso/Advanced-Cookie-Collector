@@ -9,7 +9,7 @@ extended from the Cookie Collector script by ophee:
 https://sourceforge.net/projects/cookiecollector/
 It features three independent modules that can run simultaneously or separately:
 
-1. Base Clicker: Rapid clicks on the big cookie \& Golden Cookie hunting.
+1. Base Clicker: Rapidly clicks on the big cookie w/ Golden Cookie & Reindeer detection.
 2. Auto-Shop: Automates the Godzamok buy/sell cycle.
 3. Auto-Cast: Automatically clicks "Force the Hand of Fate" when available.
 
@@ -23,7 +23,7 @@ the Pantheon (although the real power of the script comes from the Pantheon,
 being able to cast FHOF is just an added bonus). The script uses image recognition
 (thanks ophee) to initiate a buy/sell cycle that automatically sells your buildings
 before clicking the cookie until the buff from Godzamok ends, and repeats this cycle
-in a loop. The script will always check for and collect any golden cookies that spawn
+in a loop. The script will always check for and collect any golden cookies or reindeer that spawn
 when either the Base Clicker or the Auto-Shop feature is active.
 
 This could be used to set-up a variety of late game combos as well, and I do have
