@@ -37,7 +37,7 @@ The Grimoire unlocked with enough Wizard Towers available to cast FHOF.
 The script is currently configured to Auto-shop for the following buildings:
 
 * 200 each: Cursors, Grandmas, Farms, and Mines
-* 100 each of the following: Factories, Banks, Temples, Shipments, and Alchemy Labs
+* 100 each of the following: Factories, Banks, Temples, Shipments, Alchemy Labs, and Portals
   This is easily adjusted to complement your current CPS by editing the Target Array
   found near the top of the script. Instructions are provided within the script.
 
@@ -132,6 +132,8 @@ row\_temple.png
 row\_shipment.png
 
 row\_alchemy.png
+
+row\_portal.png
 
 ## CONFIGURATION
 
