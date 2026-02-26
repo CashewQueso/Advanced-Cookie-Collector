@@ -152,21 +152,18 @@ CheckReindeer() {
 }
 
 CheckGolden() {
-    ; 1. Search for regular Golden Cookie
-    ImageSearch, gX, gY, 0, 0, A_ScreenWidth, A_ScreenHeight, *32 gimg.png
-    
-    ; 2. If not found, search for Wrath Cookie
-    if (ErrorLevel != 0) {
-        ImageSearch, gX, gY, 0, 0, A_ScreenWidth, A_ScreenHeight, *32 wimg.png
-    }
-
-    ; 3. If either was found, click it
-    if (ErrorLevel = 0) {
-        gX += 5
-        gY += 5
-        Click, %gX%, %gY%
+    ; 1. Try to find/click the standard Golden Cookie
+    if (ClickOptionalImage("gimg.png"))
         return true
-    }
+    
+    ; 2. If not found, try the standard Wrath Cookie
+    if (ClickOptionalImage("wimg.png"))
+        return true
+
+    ; 3. If still not found, try the Halloween Spooky variant
+    if (ClickOptionalImage("spooky.png"))
+        return true
+
     return false
 }
 
