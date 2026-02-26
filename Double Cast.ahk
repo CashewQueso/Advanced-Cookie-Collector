@@ -66,7 +66,7 @@ ToggleProtocol:
         ImageSearch, fX, fY, 0, 0, A_ScreenWidth, A_ScreenHeight, *32 fhof.png
         fReady := (ErrorLevel = 0)
         
-        ImageSearch, gX, gY, 0, 0, A_ScreenWidth, A_ScreenHeight, *32 gimg.png
+        ImageSearch, gX, gY, 0, 0, A_ScreenWidth, A_ScreenHeight, *32 wimg.png
         gReady := (ErrorLevel = 0)
 
         if (fReady && gReady)

@@ -35,7 +35,7 @@ cookie_X := ""
 cookie_Y := ""
 
 ; --- Target Array ---
-Buildings := ["row_farm.png:6", "row_mine.png:6", "row_factory.png:6", "row_bank.png:6", "row_shipment.png:5", "row_alchemy.png:5", "row_portal.png:5", "row_temple.png:6"]
+Buildings := ["row_farm.png:7", "row_mine.png:6", "row_factory.png:6", "row_bank.png:6", "row_shipment.png:5", "row_alchemy.png:5", "row_portal.png:5", "row_temple.png:6"]
 
 ; --- Initialize Dynamic Hotkeys ---
 Hotkey, %Hotkey_BaseClicker%, ToggleBaseClicker
@@ -156,16 +156,16 @@ CheckGolden() {
     if (ClickOptionalImage("gimg.png"))
         return true
     
-    ; 2. If not found, try the standard Wrath Cookie
+    ; 2. If not found, try the Wrath Cookie
     if (ClickOptionalImage("wimg.png"))
-        return true
-
-    ; 3. If still not found, try the Halloween Spooky variant
-    if (ClickOptionalImage("spooky.png"))
         return true
 
     return false
 }
+
+; --------------------
+; Background Thread
+; --------------------
 
 ; --------------------
 ; Background Thread
@@ -176,7 +176,14 @@ MainLoop:
         return
     Loop, 25
         Click, %cookie_X%, %cookie_Y%
-    CheckGolden()
+    
+    ; Priority checks: Fortune > Golden/Wrath > Reindeer
+    if (ClickOptionalImage("fortune.png")) {
+        ; Fortune found and clicked via helper
+    } else {
+        CheckGolden()
+    }
+    
     CheckReindeer()
 return
 
