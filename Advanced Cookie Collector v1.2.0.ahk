@@ -35,7 +35,7 @@ cookie_X := ""
 cookie_Y := ""
 
 ; --- Target Array ---
-Buildings := ["row_farm.png:5", "row_mine.png:5", "row_factory.png:4", "row_bank.png:4", "row_shipment.png:4", "row_alchemy.png:4", "row_portal.png:4", "row_temple.png:4"]
+Buildings := ["row_farm.png:6", "row_mine.png:6", "row_factory.png:6", "row_bank.png:6", "row_shipment.png:5", "row_alchemy.png:5", "row_portal.png:5", "row_temple.png:6"]
 
 ; --- Initialize Dynamic Hotkeys ---
 Hotkey, %Hotkey_BaseClicker%, ToggleBaseClicker
@@ -152,7 +152,15 @@ CheckReindeer() {
 }
 
 CheckGolden() {
+    ; 1. Search for regular Golden Cookie
     ImageSearch, gX, gY, 0, 0, A_ScreenWidth, A_ScreenHeight, *32 gimg.png
+    
+    ; 2. If not found, search for Wrath Cookie
+    if (ErrorLevel != 0) {
+        ImageSearch, gX, gY, 0, 0, A_ScreenWidth, A_ScreenHeight, *32 wimg.png
+    }
+
+    ; 3. If either was found, click it
     if (ErrorLevel = 0) {
         gX += 5
         gY += 5
